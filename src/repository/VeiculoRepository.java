@@ -6,6 +6,18 @@ public class VeiculoRepository {
     private int quantidadeVeiculosCadastrados = 0;
     private int proximoId = 0;
 
+    // Redimensionar array:
+    private void redimensionarArray(){
+        if (quantidadeVeiculosCadastrados == veiculos.length) {
+            Veiculo[] novoArray =  new Veiculo[veiculos.length];
+
+            for (int i = 0; i < quantidadeVeiculosCadastrados; i++) {
+                novoArray[i] = veiculos[i];
+            }
+            veiculos = novoArray;
+        }
+    }
+
     // CRUD: Cadastro de Veículos:
     public void cadastrarVeiculo(Veiculo veiculo){
         veiculo.setId(proximoId++);
