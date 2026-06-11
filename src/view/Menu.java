@@ -1,4 +1,7 @@
 package view;
+
+import model.Eletroposto;
+import model.Cidade;
 import model.Veiculo;
 import controller.CidadeController;
 import controller.EletropostoController;
@@ -6,6 +9,7 @@ import controller.VeiculoController;
 import model.VeiculoEletrico;
 import model.VeiculoHibrido;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Menu {
@@ -199,6 +203,8 @@ public class Menu {
         }
     }
 
+    // CRUD: Menu Cidades:
+
     public void exibirMenuCidades(){
         int opcao;
         while(true){
@@ -213,18 +219,99 @@ public class Menu {
 
             switch (opcao){
                 case 1:
+                    exibirMenuCadastrarCidade();
                     break;
                 case 2:
+                    exibirMenuListarCidades();
                     break;
                 case 3:
+                    exibirMenuAtualizarCidade();
                     break;
                 case 4:
+                    exibirMenuApagarCidade();
                     break;
                 case 0:
                     return;
             }
         }
     }
+
+    public void exibirMenuCadastrarCidade() {
+        System.out.println("======== Cadastrar uma nova cidade ========");
+        System.out.println("Nome da cidade: ");
+        String nome = sc.nextLine();
+
+        System.out.println("Estado (sigla, ex: PE): ");
+        String estado = sc.nextLine();
+
+        System.out.println("Distância da capital: ");
+        double distanciaCapital = sc.nextInt();
+
+        Cidade novaCidade = new Cidade(0, nome, estado, distanciaCapital);
+        cidadeController.cadastrarCidadeController(novaCidade);
+
+        System.out.println("Cidade cadastrada com sucesso!");
+    }
+
+    public void exibirMenuListarCidades() {
+        System.out.println("======== Lista de cidades ========");
+        Cidade[] cidades = cidadeController.listarCidadesController();
+
+        if (cidades.length == 0) {
+            System.out.println("Nenhuma cidade cadastrada.");
+        }
+
+        for (Cidade cidade : cidades) {
+            System.out.println("-----------------------------------");
+            System.out.println("ID: " + cidade.getId());
+            System.out.println("Nome: " + cidade.getNome());
+            System.out.println("Estado: " + cidade.getEstado());
+            System.out.println("Distância da capital: " + cidade.getDistanciaDaCapital());
+        }
+        System.out.println("-----------------------------------");
+    }
+
+    public void exibirMenuAtualizarCidade() {
+        System.out.println("\n======== Atualizar Cidade ========");
+        System.out.println("Digite o ID da cidade que deseja atualizar: ");
+        int id = sc.nextInt();
+
+        Cidade cidadeExiste =  cidadeController.buscarCidadePorIdController(id);
+
+        if (cidadeExiste == null) {
+            System.out.println("Nenhuma cidade encontrada. Verifique o ID.");
+            return;
+        }
+
+        System.out.println("Digite o novo nome da cidade: ");
+        String novoNomeCidade = sc.nextLine();
+
+        System.out.println("Digite o novo estado da cidade(sigla): ");
+        String novoEstadoCidade = sc.nextLine();
+
+        System.out.println("Digite a nova distância da capital: ");
+        double novaDistanciaCapital = sc.nextDouble();
+
+        Cidade cidadeAtualizada = new Cidade(id, novoNomeCidade, novoEstadoCidade, novaDistanciaCapital);
+        cidadeController.atualizarCidadeController(id, cidadeAtualizada);
+        System.out.println("Cidade atualizada com sucesso!");
+    }
+
+    public void exibirMenuApagarCidade() {
+        System.out.println("\n======== Apagar cidade ========");
+        System.out.println("Digite o ID da cidade que deseja apagar:");
+        int id = sc.nextInt();
+
+        boolean sucesso = cidadeController.apagarCidadeController(id);
+        if (sucesso) {
+            System.out.println("\nCidade apagada com sucesso!");
+        }else {
+            System.out.println("\nNenhuma cidade encontrada. Verifique o ID.");
+        }
+    }
+
+    // CRUD: Menu eletroposto:
+
     public void exibirMenuEletropostos(){
         int opcao;
         while(true){
@@ -239,6 +326,7 @@ public class Menu {
 
             switch(opcao){
                 case 1:
+                    exibirMenuCadastrarEletroposto();
                     break;
                 case 2:
                     break;
@@ -252,6 +340,36 @@ public class Menu {
 
         }
     }
+
+    public void exibirMenuCadastrarEletroposto () {
+        System.out.println("\n======== Cadastrar eletroposto ========");
+        System.out.println("\nDigite o nome do eletroposto: ");
+        String nome = sc.nextLine();
+
+        System.out.println("Digite a localização: ");
+        String localizacao = sc.nextLine();
+
+        System.out.println("Digite o ID da cidade onde está localizado: ");
+        int cidadeId = sc.nextInt();
+
+        System.out.println("Digite os tipos de conectores disponíveis: ");
+        String tiposConectores = sc.nextLine();
+
+        System.out.println("Digite a potência de carga (em kW): ");
+        double potenciaCarga = sc.nextDouble();
+
+        System.out.println("Digite o preço por kWh (em R$): ");
+        double precoKwh = sc.nextDouble();
+
+        System.out.println("Digite a quantidade de vagas disponíveis: ");
+        int vagasDisponiveis = sc.nextInt();
+
+        Eletroposto novoEletroposto = new Eletroposto(0, nome, localizacao, cidadeId, tiposConectores, potenciaCarga, precoKwh, vagasDisponiveis);
+        eletropostoController.cadastrarEletropostoController(novoEletroposto);
+        System.out.println("Eletroposto cadastrado com sucesso!");
+    }
+
+
 
 
     public void exibirMenuPrincipal(){
