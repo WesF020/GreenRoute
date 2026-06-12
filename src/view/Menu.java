@@ -329,15 +329,18 @@ public class Menu {
                     exibirMenuCadastrarEletroposto();
                     break;
                 case 2:
+                    exibirMenuListarEletropostos();
                     break;
                 case 3:
+                    exibirMenuAtualizarEletroposto();
                     break;
                 case 4:
+                    exibirMenuApagarEletroposto();
                     break;
                 case 0:
                     return;
             }
-
+            
         }
     }
 
@@ -369,8 +372,82 @@ public class Menu {
         System.out.println("Eletroposto cadastrado com sucesso!");
     }
 
+    public void exibirMenuListarEletropostos () {
+        System.out.println("======== Lista de Eletropostos ========");
+        Eletroposto[] eletropostos = eletropostoController.listarEletropostoController();
+
+        if (eletropostos.length == 0) {
+            System.out.println("Nenhum eletroposto cadastrado.");
+        }
+        for (Eletroposto eletroposto : eletropostos  ) {
+            System.out.println("\n-----------------------------------");
+            System.out.println("ID: " + eletroposto.getId());
+            System.out.println("Nome: " + eletroposto.getNome());
+            System.out.println("Localização: " + eletroposto.getLocalizacao());
+            System.out.println("ID da cidade: " + eletroposto.getCidadeId());
+            System.out.println("Tipo de conectores: " + eletroposto.getTiposConectoresDisponiveis());
+            System.out.println("Potência de carga: " + eletroposto.getPotenciaCargaKw() + "KW");
+            System.out.println("Preço por Kwh: R$" + eletroposto.getPrecoPorKwh());
+            System.out.println("Quantidade de vagas disponíveis: " + eletroposto.getVagasDisponiveis());
+
+        }
+        System.out.println("-----------------------------------");
+    }
+
+    public void exibirMenuAtualizarEletroposto() {
+        System.out.println("======== Atualizar Eletroposto ========");
+        System.out.println("Digite o ID do eletroposto que deseja atualizar: ");
+        int id = sc.nextInt();
+
+        Eletroposto eletropostoExiste = eletropostoController.buscarEletropostoPorIdController(id);
+
+        if (eletropostoExiste == null) {
+            System.out.println("Nenhum eletroposto encontrado. Verifique o ID.");
+            return;
+        }
+
+        System.out.println("Novo nome: ");
+        String novoNome = sc.nextLine();
+
+        System.out.println("Nova localização: ");
+        String novoLocalizacao = sc.nextLine();
+
+        System.out.println("Novo ID da cidade: ");
+        int novoCidadeId = sc.nextInt();
+
+        System.out.println("Novos tipos de conectores: ");
+        String novoTiposDeConectores = sc.nextLine();
+
+        System.out.println("Nova potência de carga (kW): ");
+        double novoPotenciaCarga = sc.nextDouble();
+
+        System.out.println("Novo preço por kWh (R$): ");
+        double novoPrecoPorKwh = sc.nextDouble();
+
+        System.out.println("Novas vagas disponíveis: ");
+        int novoVagasDisponiveis = sc.nextInt();
+
+        Eletroposto eleropostoAtualizado = new Eletroposto(id, novoNome, novoLocalizacao, novoCidadeId, novoTiposDeConectores, novoPotenciaCarga, novoPrecoPorKwh, novoVagasDisponiveis);
+        eletropostoController.atualizarEletropostoController(id, eleropostoAtualizado);
+        System.out.println("Eletroposto atualizado com sucesso!");
+
+    }
+
+    public void exibirMenuApagarEletroposto() {
+        System.out.println("======== AApasgar Eletroposto ========");
+        System.out.println("Digite o ID do eletroposto que deseja apagar: ");
+        int id = sc.nextInt();
+
+        boolean sucesso = eletropostoController.apagarEletropostoController(id);
+        if (sucesso) {
+            System.out.println("Eletroposto apagado com sucesso!");
+        }else {
+            System.out.println("Nenhum eletroposto encontrado. Verifique o ID.");
+        }
+    }
 
 
+    //CRUD: Menu principal:
 
     public void exibirMenuPrincipal(){
         int opcao;
