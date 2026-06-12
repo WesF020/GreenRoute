@@ -315,8 +315,8 @@ public class Menu {
     public void exibirMenuEletropostos(){
         int opcao;
         while(true){
-            System.out.println("======== Menu de Eletropostos ========" + "\n");
-            System.out.println("Escolha uma das opções abaixo: " + "\n");
+            System.out.println("\n======== Menu de Eletropostos ========");
+            System.out.println("\nEscolha uma das opções abaixo: " );
             System.out.println("1 - Cadastrar um Novo Eletroposto");
             System.out.println("2 - Listar todos os Eletropostos Registrados");
             System.out.println("3 - Atualizar um Eletroposto Registrado");
@@ -340,7 +340,7 @@ public class Menu {
                 case 0:
                     return;
             }
-            
+
         }
     }
 
@@ -395,8 +395,8 @@ public class Menu {
     }
 
     public void exibirMenuAtualizarEletroposto() {
-        System.out.println("======== Atualizar Eletroposto ========");
-        System.out.println("Digite o ID do eletroposto que deseja atualizar: ");
+        System.out.println("\n======== Atualizar Eletroposto ========");
+        System.out.println("\nDigite o ID do eletroposto que deseja atualizar: ");
         int id = sc.nextInt();
 
         Eletroposto eletropostoExiste = eletropostoController.buscarEletropostoPorIdController(id);
@@ -434,8 +434,8 @@ public class Menu {
     }
 
     public void exibirMenuApagarEletroposto() {
-        System.out.println("======== AApasgar Eletroposto ========");
-        System.out.println("Digite o ID do eletroposto que deseja apagar: ");
+        System.out.println("\n======== AApasgar Eletroposto ========");
+        System.out.println("\nDigite o ID do eletroposto que deseja apagar: ");
         int id = sc.nextInt();
 
         boolean sucesso = eletropostoController.apagarEletropostoController(id);
