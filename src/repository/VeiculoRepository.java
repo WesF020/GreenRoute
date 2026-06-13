@@ -20,19 +20,23 @@ public class VeiculoRepository {
 
     // CRUD: Cadastro de Veículos:
     public void cadastrarVeiculo(Veiculo veiculo){
+        redimensionarArray();
         veiculo.setId(proximoId++);
         veiculos[quantidadeVeiculosCadastrados] = veiculo;
         quantidadeVeiculosCadastrados++;
     }
-    // Crud: Procurando Id do Veículo:
-    public Veiculo buscarPorId(int id) {
+
+    // CRUD: Buscar veiculo por ID:
+    public  Veiculo buscarPorId(int id) {
         for (int i = 0; i < quantidadeVeiculosCadastrados; i++) {
+
             if (veiculos[i].getId() == id) {
-                return veiculos[i];
+                return veiculos [i];
             }
         }
         return null;
     }
+
     // CRUD: Listar todos os veículos:
     public Veiculo[] listarTodosVeiculos(){
         return veiculos;
