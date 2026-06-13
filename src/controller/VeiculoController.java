@@ -21,18 +21,24 @@ public class VeiculoController {
     public void cadastrarVeiculoController(Veiculo veiculo){
         veiculoRepository.cadastrarVeiculo(veiculo);
     }
+
     // CRUD: Listar todos os Veículos  (Read)
     public Veiculo[] listarTodosVeiculosController(){
         return veiculoRepository.listarTodosVeiculos();
     }
+
+    // CRUD: Buscar por ID:
+    public Veiculo buscarVeiculoPorIdController(int id) {return veiculoRepository.buscarPorId(id);}
+
     // CRUD: Atualizar Veículo (Update)
-    public boolean atualizarVeiculoController(int id, Veiculo veiculoAtualizado){
-        return veiculoRepository.atualizarVeiculo(id, veiculoAtualizado);
-    }
+    public boolean atualizarVeiculoController(int id, Veiculo veiculoAtualizado){return veiculoRepository.atualizarVeiculo(id, veiculoAtualizado);}
+
     // CRUD: Apagar Veículo (Delete)
     public boolean apagarVeiculoController(int id){
         return veiculoRepository.apagarVeiculo(id);
     }
+
+    // CRUD: Simular autonomia:
 
 
 }
