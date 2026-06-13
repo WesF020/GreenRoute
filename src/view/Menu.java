@@ -146,48 +146,59 @@ public class Menu {
     public void exibirMenuAtualizarVeículos(){
         System.out.println("======== Atualizando Dados ========" + "\n");
         System.out.println("Digite o ID do Veículo: ");
-        int idDoVeículo = sc.nextInt();
+        int id = sc.nextInt();
+
+        Veiculo veiculoExiste =  veiculoController.buscarVeiculoPorIdController(id);
+
+        if (veiculoExiste == null) {
+            System.out.println("Nenhum veículo encontrado. Verifique o ID.");
+            return;
+        }
+
         System.out.println("Qual será o tipo do seu veículo?" + "\n");
         System.out.println("1 - Elétrico");
         System.out.println("2 - Híbrido");
         int tipoDoVeiculo = sc.nextInt();
+
         System.out.println("Qual será o modelo");
         String modelo = sc.next();
+
         System.out.println("Qual a Autonomia Máxima");
         double autonomiaMaxima = sc.nextDouble();
+
         System.out.println("Qual a Porcentagem da Bateria");
         double cargaBateriaAtual = sc.nextDouble();
+
         System.out.println("Qual o Consumo em Kwh por Km");
         double consumoKwhPorKm = sc.nextDouble();
+
         System.out.println("Quanto Tempo leva para uma Recarga Completa");
         int tempoRecargaBateria = sc.nextInt();
+
         if(tipoDoVeiculo == 1){
             System.out.println("Qual o tipo do conector? (Tipo 2, CCS2, CHAdeMO)");
             String tipoDoConector = sc.next();
-            System.out.println("Quanto tempo leva para realizar uma Recarga Rápida? Em minutos.");
+
+            System.out.println("Quanto tempo leva para realizar uma Recarga Rápida (Em minutos)? ");
             int tempoRecargaRapida = sc.nextInt();
-            VeiculoEletrico veiculoAtualizado = new VeiculoEletrico(idDoVeículo, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, tipoDoConector, tempoRecargaRapida);
-            boolean sucesso = veiculoController.atualizarVeiculoController(idDoVeículo, veiculoAtualizado);
-            if (sucesso) {
-                System.out.println("Veículo atualizado com sucesso!");
-            } else {
-                System.out.println("Erro! Veículo não encontrado, as alterações não foram realizadas.");
-            }
+
+            VeiculoEletrico veiculoAtualizado = new VeiculoEletrico(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, tipoDoConector, tempoRecargaRapida);
+            boolean sucesso = veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
+            System.out.println("Veículo cadastrado com sucesso!");
 
         } else if (tipoDoVeiculo == 2){
-            System.out.println("Qual a capacidade total do tanque de combustível do Veículo? Em litros.");
+            System.out.println("Qual a capacidade total do tanque de combustível do Veículo (Em litros)? ");
             double capacidadeTanqueCombustivel = sc.nextDouble();
-            System.out.println("Qual o consumo de combustível do veículo? Em km/l.");
+
+            System.out.println("Qual o consumo de combustível do veículo (Em km/l)? ");
             double consumoCombustível = sc.nextDouble();
+
             System.out.println("Qual o tipo de combustível do veículo?");
             String tipoCombustivel = sc.next();
-            VeiculoHibrido veiculoAtualizado = new VeiculoHibrido(idDoVeículo, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, capacidadeTanqueCombustivel, consumoCombustível, tipoCombustivel);
-            boolean sucesso = veiculoController.atualizarVeiculoController(idDoVeículo, veiculoAtualizado);
-            if (sucesso) {
-                System.out.println("Veículo atualizado com sucesso!");
-            } else {
-                System.out.println("Erro! Veículo não encontrado, as alterações não foram realizadas.");
-            }
+
+            VeiculoHibrido veiculoAtualizado = new VeiculoHibrido(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, capacidadeTanqueCombustivel, consumoCombustível, tipoCombustivel);
+            boolean sucesso = veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
+            System.out.println("Veículo cadastrado com sucesso!");
         }
     }
 
