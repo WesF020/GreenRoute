@@ -1,44 +1,101 @@
 package controller;
 
+import model.Eletroposto;
 import model.Veiculo;
-import repository.CidadeRepository;
-import repository.EletropostoRepository;
+import model.Cidade;
 import repository.VeiculoRepository;
 
 public class VeiculoController {
     private VeiculoRepository veiculoRepository;
-    private EletropostoRepository eletropostoRepository;
-    private CidadeRepository cidadeRepository;
+    private EletropostoController eletropostoController;
+    private CidadeController cidadeController;
 
     // Construtor
-    public VeiculoController(VeiculoRepository veiculoRepository, EletropostoRepository eletropostoRepository, CidadeRepository cidadeRepository){
+    public VeiculoController(VeiculoRepository veiculoRepository, EletropostoController eletropostoController, CidadeController cidadeController) {
         this.veiculoRepository = veiculoRepository;
-        this.eletropostoRepository = eletropostoRepository;
-        this.cidadeRepository = cidadeRepository;
+        this.eletropostoController = eletropostoController;
+        this.cidadeController = cidadeController;
     }
 
     // CRUD: Cadastrar Veículo (Create)
-    public void cadastrarVeiculoController(Veiculo veiculo){
+    public void cadastrarVeiculoController(Veiculo veiculo) {
         veiculoRepository.cadastrarVeiculo(veiculo);
     }
 
-    // CRUD: Listar todos os Veículos  (Read)
-    public Veiculo[] listarTodosVeiculosController(){
+    // CRUD: Listar todos os Veículos (Read)
+    public Veiculo[] listarTodosVeiculosController() {
         return veiculoRepository.listarTodosVeiculos();
     }
 
-    // CRUD: Buscar por ID:
-    public Veiculo buscarVeiculoPorIdController(int id) {return veiculoRepository.buscarPorId(id);}
+    // CRUD: Buscar Veículo por ID (Read)
+    public Veiculo buscarVeiculoPorId(int id) {
+        return veiculoRepository.buscarPorId(id);
+    }
 
     // CRUD: Atualizar Veículo (Update)
-    public boolean atualizarVeiculoController(int id, Veiculo veiculoAtualizado){return veiculoRepository.atualizarVeiculo(id, veiculoAtualizado);}
+    public boolean atualizarVeiculoController(int id, Veiculo veiculoAtualizado) {
+        return veiculoRepository.atualizarVeiculo(id, veiculoAtualizado);
+    }
 
     // CRUD: Apagar Veículo (Delete)
-    public boolean apagarVeiculoController(int id){
+    public boolean apagarVeiculoController(int id) {
         return veiculoRepository.apagarVeiculo(id);
     }
 
-    // CRUD: Simular autonomia:
+    // CRUD: Simular rota:
+    public String simularRota(int veiculoId, int cidadeDestinoId) {
+        Veiculo veiculo = veiculoRepository.buscarPorId(veiculoId);
+        if (veiculo == null) {
+            return "Erro! Veículo com ID " + veiculoId + " não encontrado.";
+        }
+
+        Cidade destino = cidadeController.buscarCidadePorIdController(cidadeDestinoId);
+        if (destino == null) {
+            return "Erro! Cidade com ID " + cidadeDestinoId + " não encontrada.";
+        }
+
+        double autonomiaAtual = veiculo.getAutonomiaMaxima() * (veiculo.getCargaBateriaAtual() / 100.0);
+        double distanciaDestino = destino.getDistanciaDaCapital();
+
+        StringBuilder resultado = new StringBuilder();
+        resultado.append("\n======== Resultado da Simulação de Rota ========\n");
+        resultado.append("Veículo: ").append(veiculo.getModelo()).append("\n");
+        resultado.append("Bateria atual: ").append(veiculo.getCargaBateriaAtual()).append("%\n");
+        resultado.append("Autonomia atual: ").append(String.format("%.1f", autonomiaAtual)).append(" km\n");
+        resultado.append("Destino: ").append(destino.getNome()).append(" - ").append(destino.getEstado()).append("\n");
+        resultado.append("Distância: ").append(distanciaDestino).append(" km\n");
+        resultado.append("================================================\n");
 
 
+        if (autonomiaAtual >= distanciaDestino) {
+            double kmSobressalentes = autonomiaAtual - distanciaDestino;
+            resultado.append("Autonomia suficiente para chegar ao destino!\n");
+            resultado.append("Sobram aproximadamente ").append(String.format("%.1f", kmSobressalentes)).append(" km de autonomia.\n");
+        } else {
+            // 6. Autonomia insuficiente: busca eletropostos através do EletropostoController
+            double kmFaltando = distanciaDestino - autonomiaAtual;
+            resultado.append("Autonomia insuficiente. Faltam ").append(String.format("%.1f", kmFaltando)).append(" km.\n");
+            resultado.append("\nEletropostos disponíveis em ").append(destino.getNome()).append(" para reabastecimento:\n");
+
+            Eletroposto[] eletropostos = eletropostoController.buscarEletropostosPorCidadeController(cidadeDestinoId);
+
+            if (eletropostos.length == 0) {
+                resultado.append("Nenhum eletroposto cadastrado nesta cidade.\n");
+                resultado.append("Sugestão: recarregue o veículo antes de partir.\n");
+            } else {
+                for (Eletroposto e : eletropostos) {
+                    resultado.append("\n------------------------------------------\n");
+                    resultado.append("Nome: ").append(e.getNome()).append("\n");
+                    resultado.append("Localização: ").append(e.getLocalizacao()).append("\n");
+                    resultado.append("Conectores: ").append(e.getTiposConectoresDisponiveis()).append("\n");
+                    resultado.append("Potência: ").append(e.getPotenciaCargaKw()).append(" kW\n");
+                    resultado.append("Preço: R$ ").append(e.getPrecoPorKwh()).append("/kWh\n");
+                    resultado.append("Vagas: ").append(e.getVagasDisponiveis()).append("\n");
+                }
+                resultado.append("------------------------------------------\n");
+            }
+        }
+
+        return resultado.toString();
+    }
 }
