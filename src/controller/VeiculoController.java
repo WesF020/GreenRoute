@@ -33,9 +33,7 @@ public class VeiculoController {
     }
 
     // CRUD: Atualizar Veículo (Update)
-    public boolean atualizarVeiculoController(int id, Veiculo veiculoAtualizado) {
-        return veiculoRepository.atualizarVeiculo(id, veiculoAtualizado);
-    }
+    public boolean atualizarVeiculoController(int id, Veiculo veiculoAtualizado) {return veiculoRepository.atualizarVeiculo(id, veiculoAtualizado);}
 
     // CRUD: Apagar Veículo (Delete)
     public boolean apagarVeiculoController(int id) {

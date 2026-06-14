@@ -6,7 +6,7 @@ import repository.CidadeRepository;
 public class CidadeController {
     private CidadeRepository cidadeRepository;
 
-    // Construtor
+    
     public CidadeController(CidadeRepository cidadeRepository) {
         this.cidadeRepository = cidadeRepository;
     }
@@ -18,19 +18,16 @@ public class CidadeController {
 
     // CRUD: Listar Cidades (Read)
     public Cidade[] listarCidadesController() {
-        return cidadeRepository.listarTodasCidades();
+        return cidadeRepository.listarCidades();
     }
 
     // CRUD: Buscar Cidade por ID (Read)
-    // Usado pelo VeiculoController na simulação de rota
     public Cidade buscarCidadePorIdController(int id) {
         return cidadeRepository.buscarPorId(id);
     }
 
     // CRUD: Atualizar Cidade (Update)
-    public boolean atualizarCidadeController(int id, Cidade cidadeAtualizada) {
-        return cidadeRepository.atualizarCidade(id, cidadeAtualizada);
-    }
+    public boolean atualizarCidadeController(int id, Cidade cidadeAtualizada) {return cidadeRepository.atualizarCidade(id, cidadeAtualizada);}
 
     // CRUD: Apagar Cidade (Delete)
     public boolean apagarCidadeController(int id) {

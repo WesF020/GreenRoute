@@ -23,6 +23,9 @@ public class EletropostoController {
     public Eletroposto[] buscarEletropostosPorCidadeController(int cidadeId) {return eletropostoRepository.buscarPorCidadeId(cidadeId);
     }
 
+    // CRUD: Busacar Eletroposto por ID:
+    public Eletroposto buscarEletropostoPorIdController(int id) {return eletropostoRepository.buscarPorId(id);}
+
     // CRUD: Atualizar Eletroposto (Update)
     public boolean atualizarEletropostoController(int id, Eletroposto eletropostoAtualizado) {return eletropostoRepository.atualizarEletroposto(id, eletropostoAtualizado);
     }
