@@ -35,6 +35,7 @@ public class Menu {
             System.out.println("4 - Apagar um Veículo Registrado");
             System.out.println("0 - Voltar para o Menu Principal");
             opcao = sc.nextInt();
+            sc.nextLine();
 
             switch(opcao){
                 case 1:
@@ -63,6 +64,7 @@ public class Menu {
             System.out.println("2 - Híbrido");
             System.out.println("0 - Retornar ao Menu Anterior");
             opcao = sc.nextInt();
+            sc.nextLine();
 
             switch (opcao){
                 case 1:
@@ -80,19 +82,31 @@ public class Menu {
     public void exibirMenuCadastrarVeiculoEletrico(){
         System.out.println("======== Cadastrar Veículo Elétrico ========" + "\n");
         System.out.println("Qual o modelo do seu veículo? ");
-        String modelo = sc.next();
+        String modelo = sc.nextLine();
+
         System.out.println("Qual a autonomia máxima do seu Veículo?");
         double autonomiaMaxima = sc.nextDouble();
+        sc.nextLine();
+
         System.out.println("Qual a carga atual da bateria do Veículo?");
         double cargaBateriaAtual = sc.nextDouble();
+        sc.nextLine();
+
         System.out.println("Qual o consumo Kwh por Km do seu Veículo?");
         double consumoKwhPorKm = sc.nextDouble();
+        sc.nextLine();
+
         System.out.println("Qual o tempo de recarga completa do seu Veículo? Em minutos.");
         int tempoRecargaCompleta = sc.nextInt();
+        sc.nextLine();
+
         System.out.println("Qual o tipo de conector do seu Veículo?");
-        String tipoConector = sc.next();
+        String tipoConector = sc.nextLine();
+
         System.out.println("Qual o tempo de recarga rápida do seu Veículo? Em minutos.");
         int tempoRecargaRapida = sc.nextInt();
+        sc.nextLine();
+
         VeiculoEletrico novoVeiculo = new VeiculoEletrico(0, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaCompleta, tipoConector, tempoRecargaRapida);
         veiculoController.cadastrarVeiculoController(novoVeiculo);
         System.out.println("Seu veículo foi cadastrado com sucesso!");
@@ -101,21 +115,31 @@ public class Menu {
     public void exibirMenuCadastrarVeiculoHibrido(){
         System.out.println("======== Cadastrar Veículo Híbrido ========" + "\n");
         System.out.println("Qual o modelo do seu veículo? ");
-        String modelo = sc.next();
+        String modelo = sc.nextLine();
+
         System.out.println("Qual a autonomia máxima do seu Veículo?");
         double autonomiaMaxima = sc.nextDouble();
+
         System.out.println("Qual a carga atual da bateria do Veículo?");
         double cargaBateriaAtual = sc.nextDouble();
+
         System.out.println("Qual o consumo Kwh por Km do seu Veículo?");
         double consumoKwhPorKm = sc.nextDouble();
+
         System.out.println("Qual o tempo de recarga completa do seu Veículo? Em minutos.");
         int tempoRecargaCompleta = sc.nextInt();
+
         System.out.println("Qual o nivel de consumo de combustível do seu Veículo? Em km/l");
         double consumoCombustivel = sc.nextDouble();
+        sc.nextLine();
+
         System.out.println("Qual o tipo de combustível a do seu Veículo?");
-        String tipoCombustivel= sc.next();
+        String tipoCombustivel= sc.nextLine();
+
         System.out.println("Qual a capacidade do tanque de combustível do Veículo? Em litros");
         double capacidadeTanqueCombustivel = sc.nextDouble();
+        sc.nextLine();
+
         VeiculoHibrido novoVeiculo = new VeiculoHibrido(0, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaCompleta, capacidadeTanqueCombustivel, consumoCombustivel, tipoCombustivel);
         veiculoController.cadastrarVeiculoController(novoVeiculo);
         System.out.println("Seu veículo foi cadastrado com sucesso!");
@@ -125,16 +149,19 @@ public class Menu {
         System.out.println("======== Lista de Veículos ========" + "\n");
         Veiculo[] veiculos = veiculoController.listarTodosVeiculosController();
         for(Veiculo veiculo : veiculos){
+
             if (veiculo != null){
                 System.out.println("ID do Veículo: " + veiculo.getId());
                 System.out.println("Modelo: " + veiculo.getModelo());
                 System.out.println("Autonomia Máxima: " + veiculo.getAutonomiaMaxima());
                 System.out.println("Consumo Kwh Por Km: " + veiculo.getConsumoKwhPorKm());
                 System.out.println("Tempo de Recarga Completa: " + veiculo.getTempoRecargaCompleta());
+
                 if(veiculo instanceof VeiculoEletrico){
                     VeiculoEletrico eletrico = (VeiculoEletrico) veiculo;
                     System.out.println("Tipo de Conector: " + eletrico.getTipoConector());
                     System.out.println("Tempo de Recarga Rápida: " + eletrico.getTempoRecargaRapida());
+
                 } else if (veiculo instanceof VeiculoHibrido){
                     VeiculoHibrido hibrido = (VeiculoHibrido) veiculo;
                     System.out.println("Capacidade do Tanque de Combustível: " + hibrido.getCapacidadeTanqueCombustivel());
@@ -148,6 +175,7 @@ public class Menu {
         System.out.println("======== Atualizando Dados ========" + "\n");
         System.out.println("Digite o ID do Veículo: ");
         int id = sc.nextInt();
+        sc.nextLine();
 
         Veiculo veiculoExiste =  veiculoController.buscarVeiculoPorId(id);
 
@@ -160,9 +188,10 @@ public class Menu {
         System.out.println("1 - Elétrico");
         System.out.println("2 - Híbrido");
         int tipoDoVeiculo = sc.nextInt();
+        sc.nextLine();
 
         System.out.println("Qual será o modelo");
-        String modelo = sc.next();
+        String modelo = sc.nextLine();
 
         System.out.println("Qual a Autonomia Máxima");
         double autonomiaMaxima = sc.nextDouble();
@@ -175,13 +204,15 @@ public class Menu {
 
         System.out.println("Quanto Tempo leva para uma Recarga Completa");
         int tempoRecargaBateria = sc.nextInt();
+        sc.nextLine();
 
         if(tipoDoVeiculo == 1){
             System.out.println("Qual o tipo do conector? (Tipo 2, CCS2, CHAdeMO)");
-            String tipoDoConector = sc.next();
+            String tipoDoConector = sc.nextLine();
 
             System.out.println("Quanto tempo leva para realizar uma Recarga Rápida (Em minutos)? ");
             int tempoRecargaRapida = sc.nextInt();
+            sc.nextLine();
 
             VeiculoEletrico veiculoAtualizado = new VeiculoEletrico(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, tipoDoConector, tempoRecargaRapida);
             boolean sucesso = veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
@@ -193,9 +224,10 @@ public class Menu {
 
             System.out.println("Qual o consumo de combustível do veículo (Em km/l)? ");
             double consumoCombustível = sc.nextDouble();
+            sc.nextLine();
 
             System.out.println("Qual o tipo de combustível do veículo?");
-            String tipoCombustivel = sc.next();
+            String tipoCombustivel = sc.nextLine();
 
             VeiculoHibrido veiculoAtualizado = new VeiculoHibrido(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, capacidadeTanqueCombustivel, consumoCombustível, tipoCombustivel);
             boolean sucesso = veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
@@ -207,6 +239,8 @@ public class Menu {
         System.out.println("======== Apagar Veículo ========" + "\n");
         System.out.println("Digite o id do veículo que você deseja apagar: ");
         int id = sc.nextInt();
+        sc.nextLine();
+
         boolean apagarSucesso = veiculoController.apagarVeiculoController(id);
         if (apagarSucesso){
             System.out.println("O veículo foi apagado com sucesso!");
@@ -228,6 +262,7 @@ public class Menu {
             System.out.println("4 - Apagar uma Cidade Registrada");
             System.out.println("0 - Voltar para o Menu Principal");
             opcao = sc.nextInt();
+            sc.nextLine();
 
             switch (opcao){
                 case 1:
@@ -258,6 +293,7 @@ public class Menu {
 
         System.out.println("Distância da capital: ");
         double distanciaCapital = sc.nextInt();
+        sc.nextLine();
 
         Cidade novaCidade = new Cidade(0, nome, estado, distanciaCapital);
         cidadeController.cadastrarCidadeController(novaCidade);
@@ -287,6 +323,7 @@ public class Menu {
         System.out.println("\n======== Atualizar Cidade ========");
         System.out.println("Digite o ID da cidade que deseja atualizar: ");
         int id = sc.nextInt();
+        sc.nextLine();
 
         Cidade cidadeExiste =  cidadeController.buscarCidadePorIdController(id);
 
@@ -303,6 +340,7 @@ public class Menu {
 
         System.out.println("Digite a nova distância da capital: ");
         double novaDistanciaCapital = sc.nextDouble();
+        sc.nextLine();
 
         Cidade cidadeAtualizada = new Cidade(id, novoNomeCidade, novoEstadoCidade, novaDistanciaCapital);
         cidadeController.atualizarCidadeController(id, cidadeAtualizada);
@@ -313,6 +351,7 @@ public class Menu {
         System.out.println("\n======== Apagar cidade ========");
         System.out.println("Digite o ID da cidade que deseja apagar:");
         int id = sc.nextInt();
+        sc.nextLine();
 
         boolean sucesso = cidadeController.apagarCidadeController(id);
         if (sucesso) {
@@ -335,6 +374,7 @@ public class Menu {
             System.out.println("4 - Apagar um Eletroposto Registrado");
             System.out.println("0 - Voltar para o Menu Principal");
             opcao = sc.nextInt();
+            sc.nextLine();
 
             switch(opcao){
                 case 1:
@@ -366,6 +406,7 @@ public class Menu {
 
         System.out.println("Digite o ID da cidade onde está localizado: ");
         int cidadeId = sc.nextInt();
+        sc.nextLine();
 
         System.out.println("Digite os tipos de conectores disponíveis: ");
         String tiposConectores = sc.nextLine();
@@ -378,6 +419,7 @@ public class Menu {
 
         System.out.println("Digite a quantidade de vagas disponíveis: ");
         int vagasDisponiveis = sc.nextInt();
+        sc.nextLine();
 
         Eletroposto novoEletroposto = new Eletroposto(0, nome, localizacao, cidadeId, tiposConectores, potenciaCarga, precoKwh, vagasDisponiveis);
         eletropostoController.cadastrarEletropostoController(novoEletroposto);
@@ -410,6 +452,7 @@ public class Menu {
         System.out.println("\n======== Atualizar Eletroposto ========");
         System.out.println("\nDigite o ID do eletroposto que deseja atualizar: ");
         int id = sc.nextInt();
+        sc.nextLine();
 
         Eletroposto eletropostoExiste = eletropostoController.buscarEletropostoPorIdController(id);
 
@@ -426,6 +469,7 @@ public class Menu {
 
         System.out.println("Novo ID da cidade: ");
         int novoCidadeId = sc.nextInt();
+        sc.nextLine();
 
         System.out.println("Novos tipos de conectores: ");
         String novoTiposDeConectores = sc.nextLine();
@@ -438,6 +482,7 @@ public class Menu {
 
         System.out.println("Novas vagas disponíveis: ");
         int novoVagasDisponiveis = sc.nextInt();
+        sc.nextLine();
 
         Eletroposto eleropostoAtualizado = new Eletroposto(id, novoNome, novoLocalizacao, novoCidadeId, novoTiposDeConectores, novoPotenciaCarga, novoPrecoPorKwh, novoVagasDisponiveis);
         eletropostoController.atualizarEletropostoController(id, eleropostoAtualizado);
@@ -449,6 +494,7 @@ public class Menu {
         System.out.println("\n======== AApasgar Eletroposto ========");
         System.out.println("\nDigite o ID do eletroposto que deseja apagar: ");
         int id = sc.nextInt();
+        sc.nextLine();
 
         boolean sucesso = eletropostoController.apagarEletropostoController(id);
         if (sucesso) {
@@ -466,6 +512,7 @@ public class Menu {
 
         System.out.println("Digite o ID da cidade de destino: ");
         int cidadeId = sc.nextInt();
+        sc.nextLine();
 
         String resultado = veiculoController.simularRota(veiculoId, cidadeId);
         System.out.println(resultado);
@@ -485,6 +532,8 @@ public class Menu {
             System.out.println("4 - Teste de Autonomia");
             System.out.println("0 - Fechar o Programa");
             opcao = sc.nextInt();
+            sc.nextLine();
+
             switch (opcao){
                 case 1:
                     exibirMenuVeiculos();
@@ -505,6 +554,5 @@ public class Menu {
             }
         }
     }
-
-
+    
 }
