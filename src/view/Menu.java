@@ -9,7 +9,6 @@ import controller.VeiculoController;
 import model.VeiculoEletrico;
 import model.VeiculoHibrido;
 
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Menu {
@@ -23,6 +22,8 @@ public class Menu {
         this.eletropostoController = eletropostoController;
         this.cidadeController = cidadeController;
     }
+
+    // Menu Veiculos:
     public void exibirMenuVeiculos(){
         int opcao;
         while(true){
@@ -148,7 +149,7 @@ public class Menu {
         System.out.println("Digite o ID do Veículo: ");
         int id = sc.nextInt();
 
-        Veiculo veiculoExiste =  veiculoController.buscarVeiculoPorIdController(id);
+        Veiculo veiculoExiste =  veiculoController.buscarVeiculoPorId(id);
 
         if (veiculoExiste == null) {
             System.out.println("Nenhum veículo encontrado. Verifique o ID.");
@@ -457,6 +458,19 @@ public class Menu {
         }
     }
 
+    //CRUD: Menu Simular rota:
+    public void exibirMenuSimularRota() {
+        System.out.println("\n======== Simular Autonomia ========");
+        System.out.println("Digite o ID do veículo: ");
+        int veiculoId = sc.nextInt();
+
+        System.out.println("Digite o ID da cidade de destino: ");
+        int cidadeId = sc.nextInt();
+
+        String resultado = veiculoController.simularRota(veiculoId, cidadeId);
+        System.out.println(resultado);
+    }
+
 
     //CRUD: Menu principal:
 
@@ -485,6 +499,7 @@ public class Menu {
                     break;
 
                 case 4:
+                    exibirMenuSimularRota();
                     break;
 
             }
