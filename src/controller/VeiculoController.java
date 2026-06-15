@@ -42,14 +42,15 @@ public class VeiculoController {
 
     // CRUD: Simular rota:
     public String simularRota(int veiculoId, int cidadeDestinoId) {
+
         Veiculo veiculo = veiculoRepository.buscarPorId(veiculoId);
         if (veiculo == null) {
-            return "Erro! Veículo com ID " + veiculoId + " não encontrado.";
+            return "Veículo com ID " + veiculoId + " não encontrado. Verifique o ID.";
         }
 
         Cidade destino = cidadeController.buscarCidadePorIdController(cidadeDestinoId);
         if (destino == null) {
-            return "Erro! Cidade com ID " + cidadeDestinoId + " não encontrada.";
+            return "Cidade com ID " + cidadeDestinoId + " não encontrada. Verifique o ID.";
         }
 
         double autonomiaAtual = veiculo.getAutonomiaMaxima() * (veiculo.getCargaBateriaAtual() / 100.0);
@@ -66,11 +67,12 @@ public class VeiculoController {
 
 
         if (autonomiaAtual >= distanciaDestino) {
-            double kmSobressalentes = autonomiaAtual - distanciaDestino;
+
+            double kmSobrando = autonomiaAtual - distanciaDestino;
             resultado.append("Autonomia suficiente para chegar ao destino!\n");
-            resultado.append("Sobram aproximadamente ").append(String.format("%.1f", kmSobressalentes)).append(" km de autonomia.\n");
+            resultado.append("Sobram aproximadamente ").append(String.format("%.1f", kmSobrando)).append(" km de autonomia.\n");
+            
         } else {
-            // 6. Autonomia insuficiente: busca eletropostos através do EletropostoController
             double kmFaltando = distanciaDestino - autonomiaAtual;
             resultado.append("Autonomia insuficiente. Faltam ").append(String.format("%.1f", kmFaltando)).append(" km.\n");
             resultado.append("\nEletropostos disponíveis em ").append(destino.getNome()).append(" para reabastecimento:\n");
@@ -80,6 +82,7 @@ public class VeiculoController {
             if (eletropostos.length == 0) {
                 resultado.append("Nenhum eletroposto cadastrado nesta cidade.\n");
                 resultado.append("Sugestão: recarregue o veículo antes de partir.\n");
+
             } else {
                 for (Eletroposto e : eletropostos) {
                     resultado.append("\n------------------------------------------\n");
