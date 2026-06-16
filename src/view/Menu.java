@@ -171,7 +171,6 @@ public class Menu {
                     System.out.println("Consumo de Combustível: " + hibrido.getConsumoCombustivel());
                     System.out.println("Tipo do Combustível: " + hibrido.getTipoCombustivel());
                 }
-                System.out.println("\n-----------------------------\n");
             }
         } if(!encontrouVeiculo){
             System.out.println("Nenhum veículo foi registrado.");
@@ -414,8 +413,8 @@ public class Menu {
         int cidadeId = sc.nextInt();
         sc.nextLine();
 
-        if(cidadeController.buscarCidadePorIdController(cidadeId) == null){
-            System.out.println("Nenhuma cidade encontrada com o ID " + cidadeId + ". Coloque um ID válido.");
+        if (cidadeController.buscarCidadePorIdController(cidadeId) == null) {
+            System.out.println("Nenhuma cidade encontrada com o ID " + cidadeId + ". Coloque um ID válido." );
             return;
         }
 
@@ -521,9 +520,19 @@ public class Menu {
         System.out.println("Digite o ID do veículo: ");
         int veiculoId = sc.nextInt();
 
+        if (veiculoController.buscarVeiculoPorId(veiculoId) == null) {
+            System.out.println("Nenhuma cidade encontrada com o ID " + veiculoId + ". Verifique o ID.");
+            return;
+        }
+
         System.out.println("Digite o ID da cidade de destino: ");
         int cidadeId = sc.nextInt();
         sc.nextLine();
+
+        if (cidadeController.buscarCidadePorIdController(cidadeId) == null) {
+            System.out.println("Nenhuma cidade encontrada com o ID " + cidadeId + ". Verifique o ID." );
+            return;
+        }
 
         String resultado = veiculoController.simularRota(veiculoId, cidadeId);
         System.out.println(resultado);
