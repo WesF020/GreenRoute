@@ -148,9 +148,12 @@ public class Menu {
     public void exibirMenuListarVeiculos(){
         System.out.println("======== Lista de Veículos ========" + "\n");
         Veiculo[] veiculos = veiculoController.listarTodosVeiculosController();
+        boolean encontrouVeiculo = false;
         for(Veiculo veiculo : veiculos){
 
             if (veiculo != null){
+                encontrouVeiculo = true;
+
                 System.out.println("ID do Veículo: " + veiculo.getId());
                 System.out.println("Modelo: " + veiculo.getModelo());
                 System.out.println("Autonomia Máxima: " + veiculo.getAutonomiaMaxima());
@@ -169,7 +172,9 @@ public class Menu {
                     System.out.println("Tipo do Combustível: " + hibrido.getTipoCombustivel());
                 }
             }
-        }
+        } if(!encontrouVeiculo){
+            System.out.println("Nenhum veículo foi registrado.");
+        } return;
     }
     public void exibirMenuAtualizarVeículos(){
         System.out.println("======== Atualizando Dados ========" + "\n");
@@ -292,7 +297,7 @@ public class Menu {
         String estado = sc.nextLine();
 
         System.out.println("Distância da capital: ");
-        double distanciaCapital = sc.nextInt();
+        double distanciaCapital = sc.nextDouble();
         sc.nextLine();
 
         Cidade novaCidade = new Cidade(0, nome, estado, distanciaCapital);
@@ -551,6 +556,9 @@ public class Menu {
                     exibirMenuSimularRota();
                     break;
 
+                case 0:
+                    System.out.println("Encerrando o programa...");
+                    System.exit(0);
             }
         }
     }
