@@ -171,6 +171,7 @@ public class Menu {
                     System.out.println("Consumo de Combustível: " + hibrido.getConsumoCombustivel());
                     System.out.println("Tipo do Combustível: " + hibrido.getTipoCombustivel());
                 }
+                System.out.println("\n-----------------------------\n");
             }
         } if(!encontrouVeiculo){
             System.out.println("Nenhum veículo foi registrado.");
@@ -412,6 +413,11 @@ public class Menu {
         System.out.println("Digite o ID da cidade onde está localizado: ");
         int cidadeId = sc.nextInt();
         sc.nextLine();
+
+        if(cidadeController.buscarCidadePorIdController(cidadeId) == null){
+            System.out.println("Nenhuma cidade encontrada com o ID " + cidadeId + ". Coloque um ID válido.");
+            return;
+        }
 
         System.out.println("Digite os tipos de conectores disponíveis: ");
         String tiposConectores = sc.nextLine();
