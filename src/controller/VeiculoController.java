@@ -44,14 +44,7 @@ public class VeiculoController {
     public String simularRota(int veiculoId, int cidadeDestinoId) {
 
         Veiculo veiculo = veiculoRepository.buscarPorId(veiculoId);
-        if (veiculo == null) {
-            return "Veículo com ID " + veiculoId + " não encontrado. Verifique o ID.";
-        }
-
         Cidade destino = cidadeController.buscarCidadePorIdController(cidadeDestinoId);
-        if (destino == null) {
-            return "Cidade com ID " + cidadeDestinoId + " não encontrada. Verifique o ID.";
-        }
 
         double autonomiaAtual = veiculo.getAutonomiaMaxima() * (veiculo.getCargaBateriaAtual() / 100.0);
         double distanciaDestino = destino.getDistanciaDaCapital();
@@ -71,7 +64,7 @@ public class VeiculoController {
             double kmSobrando = autonomiaAtual - distanciaDestino;
             resultado.append("Autonomia suficiente para chegar ao destino!\n");
             resultado.append("Sobram aproximadamente ").append(String.format("%.1f", kmSobrando)).append(" km de autonomia.\n");
-            
+
         } else {
             double kmFaltando = distanciaDestino - autonomiaAtual;
             resultado.append("Autonomia insuficiente. Faltam ").append(String.format("%.1f", kmFaltando)).append(" km.\n");
