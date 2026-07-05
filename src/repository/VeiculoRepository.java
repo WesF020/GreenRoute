@@ -1,52 +1,41 @@
 package repository;
+
 import model.Veiculo;
+import java.util.ArrayList;
 
 public class VeiculoRepository {
-    private Veiculo[] veiculos = new Veiculo[10];
-    private int quantidadeVeiculosCadastrados = 0;
+    private ArrayList<Veiculo> veiculos = new ArrayList<>();
     private int proximoId = 0;
 
-    // Redimensionar array:
-    private void redimensionarArray(){
-        if (quantidadeVeiculosCadastrados == veiculos.length) {
-            Veiculo[] novoArray =  new Veiculo[veiculos.length];
-
-            for (int i = 0; i < quantidadeVeiculosCadastrados; i++) {
-                novoArray[i] = veiculos[i];
-            }
-            veiculos = novoArray;
-        }
-    }
 
     // CRUD: Cadastro de Veículos:
     public void cadastrarVeiculo(Veiculo veiculo){
-        redimensionarArray();
         veiculo.setId(proximoId++);
-        veiculos[quantidadeVeiculosCadastrados] = veiculo;
-        quantidadeVeiculosCadastrados++;
+        veiculos.add(veiculo);
     }
 
     // CRUD: Buscar veiculo por ID:
     public  Veiculo buscarPorId(int id) {
-        for (int i = 0; i < quantidadeVeiculosCadastrados; i++) {
+        for (Veiculo veiculo : veiculos) {
 
-            if (veiculos[i].getId() == id) {
-                return veiculos [i];
+            if (veiculo.getId() == id) {
+                return veiculo;
             }
         }
         return null;
     }
 
     // CRUD: Listar todos os veículos:
-    public Veiculo[] listarTodosVeiculos(){
+    public ArrayList<Veiculo> listarTodosVeiculos() {
         return veiculos;
     }
 
     // CRUD: Atualizar Veículo:
     public boolean atualizarVeiculo(int id, Veiculo veiculoAtualizado){
-        for (int i = 0; i < quantidadeVeiculosCadastrados; i++){
-            if (veiculos[i].getId() == id){
-                veiculos[i] = veiculoAtualizado;
+        for (int i = 0; i < veiculos.size(); i++){
+            if (veiculos.get(i).getId() == id){
+                veiculoAtualizado.setId(id);
+                veiculos.set(i, veiculoAtualizado);
                 return true;
             }
         }
@@ -54,14 +43,10 @@ public class VeiculoRepository {
     }
 
     // CRUD: Apagar Veículo:
-    public boolean apagarVeiculo(int id){
-        for (int i = 0; i < quantidadeVeiculosCadastrados; i++){
-            if (veiculos[i].getId() == id){
-                for (int j = i; j < quantidadeVeiculosCadastrados - 1; j++){
-                    veiculos[j] = veiculos[j + 1];
-                }
-                veiculos[quantidadeVeiculosCadastrados - 1] = null;
-                quantidadeVeiculosCadastrados--;
+    public boolean apagarVeiculo(int id) {
+        for (int i = 0; i < veiculos.size(); i++) {
+            if (veiculos.get(i).getId() == id) {
+                veiculos.remove(i);
                 return true;
             }
         }
