@@ -2,11 +2,11 @@ package controller;
 
 import model.Cidade;
 import repository.CidadeRepository;
+import java.util.ArrayList;
 
 public class CidadeController {
     private CidadeRepository cidadeRepository;
 
-    
     public CidadeController(CidadeRepository cidadeRepository) {
         this.cidadeRepository = cidadeRepository;
     }
@@ -17,7 +17,7 @@ public class CidadeController {
     }
 
     // CRUD: Listar Cidades (Read)
-    public Cidade[] listarCidadesController() {
+    public ArrayList<Cidade> listarCidadesController() {
         return cidadeRepository.listarCidades();
     }
 
@@ -27,7 +27,9 @@ public class CidadeController {
     }
 
     // CRUD: Atualizar Cidade (Update)
-    public boolean atualizarCidadeController(int id, Cidade cidadeAtualizada) {return cidadeRepository.atualizarCidade(id, cidadeAtualizada);}
+    public boolean atualizarCidadeController(int id, Cidade cidadeAtualizada) {
+        return cidadeRepository.atualizarCidade(id, cidadeAtualizada);
+    }
 
     // CRUD: Apagar Cidade (Delete)
     public boolean apagarCidadeController(int id) {
