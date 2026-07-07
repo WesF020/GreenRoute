@@ -4,12 +4,16 @@ import controller.CidadeController;
 import controller.EletropostoController;
 import controller.RotaController;
 import controller.VeiculoController;
+import exceptions.CidadeNaoEncontradaException;
+import exceptions.EletropostoNaoEncontradoException;
+import exceptions.ValorInvalidoException;
+import exceptions.VeiculoNaoEncontradoException;
 import model.Cidade;
 import model.Eletroposto;
 import model.Veiculo;
 import model.VeiculoEletrico;
 import model.VeiculoHibrido;
-import Gemini.CadastroVeiculoIA;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,21 +22,17 @@ public class Menu {
     private EletropostoController eletropostoController;
     private CidadeController cidadeController;
     private RotaController rotaController;
-    private CadastroVeiculoIA cadastroVeiculoIA;
     private Scanner sc = new Scanner(System.in);
 
-    public Menu(VeiculoController veiculoController, EletropostoController eletropostoController, CidadeController cidadeController, RotaController rotaController, CadastroVeiculoIA cadastroVeiculoIA) {
+    public Menu(VeiculoController veiculoController, EletropostoController eletropostoController, CidadeController cidadeController, RotaController rotaController) {
         this.veiculoController = veiculoController;
         this.eletropostoController = eletropostoController;
         this.cidadeController = cidadeController;
         this.rotaController = rotaController;
-        this.cadastroVeiculoIA = cadastroVeiculoIA;
     }
 
-    // =====================================================================
-    // MENU PRINCIPAL
-    // =====================================================================
 
+    // MENU PRINCIPAL
     public void exibirMenuPrincipal() {
         int opcao;
         while (true) {
@@ -47,18 +47,10 @@ public class Menu {
             sc.nextLine();
 
             switch (opcao) {
-                case 1:
-                    exibirMenuVeiculos();
-                    break;
-                case 2:
-                    exibirMenuCidades();
-                    break;
-                case 3:
-                    exibirMenuEletropostos();
-                    break;
-                case 4:
-                    exibirMenuSimularRota();
-                    break;
+                case 1: exibirMenuVeiculos(); break;
+                case 2: exibirMenuCidades(); break;
+                case 3: exibirMenuEletropostos(); break;
+                case 4: exibirMenuSimularRota(); break;
                 case 0:
                     System.out.println("Encerrando o programa...");
                     System.exit(0);
@@ -68,44 +60,27 @@ public class Menu {
         }
     }
 
-    // =====================================================================
-    // MENU VEÍCULOS
-    // =====================================================================
 
+    // MENU: VEÍCULOS
     public void exibirMenuVeiculos() {
         int opcao;
         while (true) {
             System.out.println("======== Menu de Veículos ========\n");
-            System.out.println("Escolha uma das opções abaixo:\n");
             System.out.println("1 - Cadastrar um Novo Veículo");
             System.out.println("2 - Listar todos os Veículos Registrados");
             System.out.println("3 - Atualizar Dados de um Veículo Registrado");
             System.out.println("4 - Apagar um Veículo Registrado");
-            System.out.println("5 - Cadastro Rápido com IA");
             System.out.println("0 - Voltar para o Menu Principal");
             opcao = sc.nextInt();
             sc.nextLine();
 
             switch (opcao) {
-                case 1:
-                    exibirMenuCadastrarVeiculos();
-                    break;
-                case 2:
-                    exibirMenuListarVeiculos();
-                    break;
-                case 3:
-                    exibirMenuAtualizarVeículos();
-                    break;
-                case 4:
-                    exibirMenuApagarVeiculo();
-                    break;
-                case 5:
-                    exibirMenuCadastroRapidoIA();
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Opção inválida! Tente novamente.");
+                case 1: exibirMenuCadastrarVeiculos(); break;
+                case 2: exibirMenuListarVeiculos(); break;
+                case 3: exibirMenuAtualizarVeiculos(); break;
+                case 4: exibirMenuApagarVeiculo(); break;
+                case 0: return;
+                default: System.out.println("Opção inválida! Tente novamente.");
             }
         }
     }
@@ -114,7 +89,6 @@ public class Menu {
         int opcao;
         while (true) {
             System.out.println("======== Cadastrar um Novo Veículo ========\n");
-            System.out.println("Qual será o tipo do seu veículo?\n");
             System.out.println("1 - Elétrico");
             System.out.println("2 - Híbrido");
             System.out.println("0 - Retornar ao Menu Anterior");
@@ -122,84 +96,75 @@ public class Menu {
             sc.nextLine();
 
             switch (opcao) {
-                case 1:
-                    exibirMenuCadastrarVeiculoEletrico();
-                    break;
-                case 2:
-                    exibirMenuCadastrarVeiculoHibrido();
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Opção inválida! Tente novamente.");
+                case 1: exibirMenuCadastrarVeiculoEletrico(); break;
+                case 2: exibirMenuCadastrarVeiculoHibrido(); break;
+                case 0: return;
+                default: System.out.println("Opção inválida! Tente novamente.");
             }
         }
     }
 
     public void exibirMenuCadastrarVeiculoEletrico() {
-        System.out.println("======== Cadastrar Veículo Elétrico ========\n");
-        System.out.println("Qual o modelo do seu veículo? ");
-        String modelo = sc.nextLine();
+        try {
+            System.out.println("======== Cadastrar Veículo Elétrico ========\n");
+            System.out.print("Modelo: ");
+            String modelo = sc.nextLine();
+            System.out.print("Autonomia máxima (km): ");
+            double autonomiaMaxima = sc.nextDouble();
+            sc.nextLine();
+            System.out.print("Carga da bateria (0 a 100): ");
+            double cargaBateriaAtual = sc.nextDouble();
+            sc.nextLine();
+            System.out.print("Consumo kWh/km: ");
+            double consumoKwhPorKm = sc.nextDouble();
+            sc.nextLine();
+            System.out.print("Tempo de recarga completa (min): ");
+            int tempoRecargaCompleta = sc.nextInt();
+            sc.nextLine();
+            System.out.print("Tipo de conector (ex: Tipo2, CCS2, CHAdeMO): ");
+            String tipoConector = sc.nextLine();
+            System.out.print("Tempo de recarga rápida (min): ");
+            int tempoRecargaRapida = sc.nextInt();
+            sc.nextLine();
 
-        System.out.println("Qual a autonomia máxima do seu Veículo? (em km)");
-        double autonomiaMaxima = sc.nextDouble();
-        sc.nextLine();
+            VeiculoEletrico novoVeiculo = new VeiculoEletrico(0, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaCompleta, tipoConector, tempoRecargaRapida);
+            veiculoController.cadastrarVeiculoController(novoVeiculo);
+            System.out.println("Veículo elétrico cadastrado com sucesso!");
 
-        System.out.println("Qual a carga atual da bateria do Veículo? (0 a 100)");
-        double cargaBateriaAtual = sc.nextDouble();
-        sc.nextLine();
-
-        System.out.println("Qual o consumo kWh por km do seu Veículo?");
-        double consumoKwhPorKm = sc.nextDouble();
-        sc.nextLine();
-
-        System.out.println("Qual o tempo de recarga completa do seu Veículo? (em minutos)");
-        int tempoRecargaCompleta = sc.nextInt();
-        sc.nextLine();
-
-        System.out.println("Qual o tipo de conector do seu Veículo? (ex: Tipo2, CCS2, CHAdeMO)");
-        String tipoConector = sc.nextLine();
-
-        System.out.println("Qual o tempo de recarga rápida do seu Veículo? (em minutos)");
-        int tempoRecargaRapida = sc.nextInt();
-        sc.nextLine();
-
-        VeiculoEletrico novoVeiculo = new VeiculoEletrico(0, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaCompleta, tipoConector, tempoRecargaRapida);
-        veiculoController.cadastrarVeiculoController(novoVeiculo);
-        System.out.println("Seu veículo foi cadastrado com sucesso!");
+        } catch (ValorInvalidoException e) {
+            System.out.println("Erro ao cadastrar veículo: " + e.getMessage());
+        }
     }
 
     public void exibirMenuCadastrarVeiculoHibrido() {
-        System.out.println("======== Cadastrar Veículo Híbrido ========\n");
-        System.out.println("Qual o modelo do seu veículo? ");
-        String modelo = sc.nextLine();
+        try {
+            System.out.println("======== Cadastrar Veículo Híbrido ========\n");
+            System.out.print("Modelo: ");
+            String modelo = sc.nextLine();
+            System.out.print("Autonomia máxima (km): ");
+            double autonomiaMaxima = sc.nextDouble();
+            System.out.print("Carga da bateria (0 a 100): ");
+            double cargaBateriaAtual = sc.nextDouble();
+            System.out.print("Consumo kWh/km: ");
+            double consumoKwhPorKm = sc.nextDouble();
+            System.out.print("Tempo de recarga completa (min): ");
+            int tempoRecargaCompleta = sc.nextInt();
+            System.out.print("Consumo de combustível (km/l): ");
+            double consumoCombustivel = sc.nextDouble();
+            sc.nextLine();
+            System.out.print("Tipo de combustível (ex: Gasolina, Etanol): ");
+            String tipoCombustivel = sc.nextLine();
+            System.out.print("Capacidade do tanque (litros): ");
+            double capacidadeTanqueCombustivel = sc.nextDouble();
+            sc.nextLine();
 
-        System.out.println("Qual a autonomia máxima do seu Veículo? (em km)");
-        double autonomiaMaxima = sc.nextDouble();
+            VeiculoHibrido novoVeiculo = new VeiculoHibrido(0, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaCompleta, capacidadeTanqueCombustivel, consumoCombustivel, tipoCombustivel);
+            veiculoController.cadastrarVeiculoController(novoVeiculo);
+            System.out.println("Veículo híbrido cadastrado com sucesso!");
 
-        System.out.println("Qual a carga atual da bateria do Veículo? (0 a 100)");
-        double cargaBateriaAtual = sc.nextDouble();
-
-        System.out.println("Qual o consumo kWh por km do seu Veículo?");
-        double consumoKwhPorKm = sc.nextDouble();
-
-        System.out.println("Qual o tempo de recarga completa do seu Veículo? (em minutos)");
-        int tempoRecargaCompleta = sc.nextInt();
-
-        System.out.println("Qual o nível de consumo de combustível do seu Veículo? (em km/l)");
-        double consumoCombustivel = sc.nextDouble();
-        sc.nextLine();
-
-        System.out.println("Qual o tipo de combustível do seu Veículo? (ex: Gasolina, Etanol)");
-        String tipoCombustivel = sc.nextLine();
-
-        System.out.println("Qual a capacidade do tanque de combustível do Veículo? (em litros)");
-        double capacidadeTanqueCombustivel = sc.nextDouble();
-        sc.nextLine();
-
-        VeiculoHibrido novoVeiculo = new VeiculoHibrido(0, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaCompleta, capacidadeTanqueCombustivel, consumoCombustivel, tipoCombustivel);
-        veiculoController.cadastrarVeiculoController(novoVeiculo);
-        System.out.println("Seu veículo foi cadastrado com sucesso!");
+        } catch (ValorInvalidoException e) {
+            System.out.println("Erro ao cadastrar veículo: " + e.getMessage());
+        }
     }
 
     public void exibirMenuListarVeiculos() {
@@ -207,7 +172,7 @@ public class Menu {
         ArrayList<Veiculo> veiculos = veiculoController.listarTodosVeiculosController();
 
         if (veiculos.isEmpty()) {
-            System.out.println("Nenhum veículo foi registrado.");
+            System.out.println("Nenhum veículo registrado.");
             return;
         }
 
@@ -219,7 +184,6 @@ public class Menu {
             System.out.println("Carga da Bateria: " + veiculo.getCargaBateriaAtual() + "%");
             System.out.println("Consumo kWh/km: " + veiculo.getConsumoKwhPorKm());
             System.out.println("Tempo de Recarga Completa: " + veiculo.getTempoRecargaCompleta() + " min");
-
             if (veiculo instanceof VeiculoEletrico) {
                 VeiculoEletrico eletrico = (VeiculoEletrico) veiculo;
                 System.out.println("Tipo: Elétrico");
@@ -236,109 +200,80 @@ public class Menu {
         System.out.println("-----------------------------------");
     }
 
-    public void exibirMenuAtualizarVeículos() {
-        System.out.println("======== Atualizando Dados ========\n");
-        System.out.println("Digite o ID do Veículo: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+    public void exibirMenuAtualizarVeiculos() {
+        try {
+            System.out.println("======== Atualizar Veículo ========\n");
+            System.out.print("Digite o ID do Veículo: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+            veiculoController.buscarVeiculoPorId(id);
 
-        Veiculo veiculoExiste = veiculoController.buscarVeiculoPorId(id);
-        if (veiculoExiste == null) {
-            System.out.println("Nenhum veículo encontrado. Verifique o ID.");
-            return;
-        }
-
-        System.out.println("Qual será o tipo do seu veículo?\n");
-        System.out.println("1 - Elétrico");
-        System.out.println("2 - Híbrido");
-        int tipoDoVeiculo = sc.nextInt();
-        sc.nextLine();
-
-        System.out.println("Qual será o modelo?");
-        String modelo = sc.nextLine();
-
-        System.out.println("Qual a Autonomia Máxima? (em km)");
-        double autonomiaMaxima = sc.nextDouble();
-
-        System.out.println("Qual a Porcentagem da Bateria? (0 a 100)");
-        double cargaBateriaAtual = sc.nextDouble();
-
-        System.out.println("Qual o Consumo em kWh por km?");
-        double consumoKwhPorKm = sc.nextDouble();
-
-        System.out.println("Quanto tempo leva para uma Recarga Completa? (em minutos)");
-        int tempoRecargaBateria = sc.nextInt();
-        sc.nextLine();
-
-        if (tipoDoVeiculo == 1) {
-            System.out.println("Qual o tipo do conector? (ex: Tipo2, CCS2, CHAdeMO)");
-            String tipoDoConector = sc.nextLine();
-
-            System.out.println("Quanto tempo leva para uma Recarga Rápida? (em minutos)");
-            int tempoRecargaRapida = sc.nextInt();
+            System.out.println("Tipo do veículo:\n1 - Elétrico\n2 - Híbrido");
+            int tipoDoVeiculo = sc.nextInt();
             sc.nextLine();
 
-            VeiculoEletrico veiculoAtualizado = new VeiculoEletrico(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, tipoDoConector, tempoRecargaRapida);
-            veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
-            System.out.println("Veículo atualizado com sucesso!");
-
-        } else if (tipoDoVeiculo == 2) {
-            System.out.println("Qual a capacidade total do tanque de combustível? (em litros)");
-            double capacidadeTanqueCombustivel = sc.nextDouble();
-
-            System.out.println("Qual o consumo de combustível? (em km/l)");
-            double consumoCombustivel = sc.nextDouble();
+            System.out.print("Modelo: ");
+            String modelo = sc.nextLine();
+            System.out.print("Autonomia máxima (km): ");
+            double autonomiaMaxima = sc.nextDouble();
+            System.out.print("Carga da bateria (0 a 100): ");
+            double cargaBateriaAtual = sc.nextDouble();
+            System.out.print("Consumo kWh/km: ");
+            double consumoKwhPorKm = sc.nextDouble();
+            System.out.print("Tempo de recarga completa (min): ");
+            int tempoRecargaBateria = sc.nextInt();
             sc.nextLine();
 
-            System.out.println("Qual o tipo de combustível?");
-            String tipoCombustivel = sc.nextLine();
-
-            VeiculoHibrido veiculoAtualizado = new VeiculoHibrido(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, capacidadeTanqueCombustivel, consumoCombustivel, tipoCombustivel);
-            veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
+            if (tipoDoVeiculo == 1) {
+                System.out.print("Tipo do conector (ex: Tipo2, CCS2, CHAdeMO): ");
+                String tipoDoConector = sc.nextLine();
+                System.out.print("Tempo de recarga rápida (min): ");
+                int tempoRecargaRapida = sc.nextInt();
+                sc.nextLine();
+                VeiculoEletrico veiculoAtualizado = new VeiculoEletrico(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, tipoDoConector, tempoRecargaRapida);
+                veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
+            } else if (tipoDoVeiculo == 2) {
+                System.out.print("Capacidade do tanque (litros): ");
+                double capacidadeTanque = sc.nextDouble();
+                System.out.print("Consumo de combustível (km/l): ");
+                double consumoCombustivel = sc.nextDouble();
+                sc.nextLine();
+                System.out.print("Tipo de combustível: ");
+                String tipoCombustivel = sc.nextLine();
+                VeiculoHibrido veiculoAtualizado = new VeiculoHibrido(id, modelo, autonomiaMaxima, cargaBateriaAtual, consumoKwhPorKm, tempoRecargaBateria, capacidadeTanque, consumoCombustivel, tipoCombustivel);
+                veiculoController.atualizarVeiculoController(id, veiculoAtualizado);
+            } else {
+                System.out.println("Tipo inválido! Nenhuma alteração realizada.");
+                return;
+            }
             System.out.println("Veículo atualizado com sucesso!");
-        } else {
-            System.out.println("Tipo inválido! Nenhuma alteração realizada.");
+
+        } catch (VeiculoNaoEncontradoException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } catch (ValorInvalidoException e) {
+            System.out.println("Erro ao atualizar veículo: " + e.getMessage());
         }
     }
 
     public void exibirMenuApagarVeiculo() {
-        System.out.println("======== Apagar Veículo ========\n");
-        System.out.println("Digite o ID do veículo que deseja apagar: ");
-        int id = sc.nextInt();
-        sc.nextLine();
-
-        boolean sucesso = veiculoController.apagarVeiculoController(id);
-        if (sucesso) {
-            System.out.println("O veículo foi apagado com sucesso!");
-        } else {
-            System.out.println("Erro! Veículo não encontrado. Verifique o ID.");
-        }
-    }
-
-    public void exibirMenuCadastroRapidoIA(){
-        System.out.println("\n======== Cadastro Rápido com IA ========");
-        System.out.println("Insira as informações do veículo em texto corrido(tipo, modelo, autonomia, etc.):");
-        String descricaoUsuario = sc.nextLine();
-
-        System.out.println("\nConsultando com o Gemini...");
         try {
-            Veiculo veiculo = cadastroVeiculoIA.interpretarDescricao(descricaoUsuario);
-        } catch (IllegalStateException | IllegalArgumentException e){
-            System.out.println("\nNão foi possível cadastrar o veículo automaticamente.");
-            System.out.println("Motivo: " + e.getMessage());
-            System.out.println("Tente novaemente ou cadastre manualmente pelas opcoes 1 ou 2.");
+            System.out.println("======== Apagar Veículo ========\n");
+            System.out.print("Digite o ID do veículo que deseja apagar: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+            veiculoController.apagarVeiculoController(id);
+            System.out.println("Veículo apagado com sucesso!");
+        } catch (VeiculoNaoEncontradoException e) {
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 
-    // =====================================================================
-    // MENU CIDADES
-    // =====================================================================
 
+    // MENU: CIDADES
     public void exibirMenuCidades() {
         int opcao;
         while (true) {
             System.out.println("======== Menu de Cidades ========\n");
-            System.out.println("Escolha uma das opções abaixo:\n");
             System.out.println("1 - Cadastrar uma Nova Cidade");
             System.out.println("2 - Listar todas as Cidades Registradas");
             System.out.println("3 - Atualizar uma Cidade Registrada");
@@ -348,41 +283,34 @@ public class Menu {
             sc.nextLine();
 
             switch (opcao) {
-                case 1:
-                    exibirMenuCadastrarCidade();
-                    break;
-                case 2:
-                    exibirMenuListarCidades();
-                    break;
-                case 3:
-                    exibirMenuAtualizarCidade();
-                    break;
-                case 4:
-                    exibirMenuApagarCidade();
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Opção inválida! Tente novamente.");
+                case 1: exibirMenuCadastrarCidade(); break;
+                case 2: exibirMenuListarCidades(); break;
+                case 3: exibirMenuAtualizarCidade(); break;
+                case 4: exibirMenuApagarCidade(); break;
+                case 0: return;
+                default: System.out.println("Opção inválida! Tente novamente.");
             }
         }
     }
 
     public void exibirMenuCadastrarCidade() {
-        System.out.println("======== Cadastrar uma Nova Cidade ========");
-        System.out.println("Nome da cidade: ");
-        String nome = sc.nextLine();
+        try {
+            System.out.println("======== Cadastrar uma Nova Cidade ========");
+            System.out.print("Nome da cidade: ");
+            String nome = sc.nextLine();
+            System.out.print("Estado (sigla, ex: PE): ");
+            String estado = sc.nextLine();
+            System.out.print("Distância da capital (km): ");
+            double distanciaCapital = sc.nextDouble();
+            sc.nextLine();
 
-        System.out.println("Estado (sigla, ex: PE): ");
-        String estado = sc.nextLine();
+            Cidade novaCidade = new Cidade(0, nome, estado, distanciaCapital);
+            cidadeController.cadastrarCidadeController(novaCidade);
+            System.out.println("Cidade cadastrada com sucesso!");
 
-        System.out.println("Distância da capital (em km): ");
-        double distanciaCapital = sc.nextDouble();
-        sc.nextLine();
-
-        Cidade novaCidade = new Cidade(0, nome, estado, distanciaCapital);
-        cidadeController.cadastrarCidadeController(novaCidade);
-        System.out.println("Cidade cadastrada com sucesso!");
+        } catch (ValorInvalidoException e) {
+            System.out.println("Erro ao cadastrar cidade: " + e.getMessage());
+        }
     }
 
     public void exibirMenuListarCidades() {
@@ -405,55 +333,50 @@ public class Menu {
     }
 
     public void exibirMenuAtualizarCidade() {
-        System.out.println("\n======== Atualizar Cidade ========");
-        System.out.println("Digite o ID da cidade que deseja atualizar: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        try {
+            System.out.println("\n======== Atualizar Cidade ========");
+            System.out.print("Digite o ID da cidade que deseja atualizar: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+            cidadeController.buscarCidadePorIdController(id);
 
-        Cidade cidadeExiste = cidadeController.buscarCidadePorIdController(id);
-        if (cidadeExiste == null) {
-            System.out.println("Nenhuma cidade encontrada. Verifique o ID.");
-            return;
+            System.out.print("Novo nome: ");
+            String novoNome = sc.nextLine();
+            System.out.print("Novo estado (sigla): ");
+            String novoEstado = sc.nextLine();
+            System.out.print("Nova distância da capital (km): ");
+            double novaDistancia = sc.nextDouble();
+            sc.nextLine();
+
+            Cidade cidadeAtualizada = new Cidade(id, novoNome, novoEstado, novaDistancia);
+            cidadeController.atualizarCidadeController(id, cidadeAtualizada);
+            System.out.println("Cidade atualizada com sucesso!");
+
+        } catch (CidadeNaoEncontradaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } catch (ValorInvalidoException e) {
+            System.out.println("Erro ao atualizar cidade: " + e.getMessage());
         }
-
-        System.out.println("Digite o novo nome da cidade: ");
-        String novoNomeCidade = sc.nextLine();
-
-        System.out.println("Digite o novo estado (sigla): ");
-        String novoEstadoCidade = sc.nextLine();
-
-        System.out.println("Digite a nova distância da capital (em km): ");
-        double novaDistanciaCapital = sc.nextDouble();
-        sc.nextLine();
-
-        Cidade cidadeAtualizada = new Cidade(id, novoNomeCidade, novoEstadoCidade, novaDistanciaCapital);
-        cidadeController.atualizarCidadeController(id, cidadeAtualizada);
-        System.out.println("Cidade atualizada com sucesso!");
     }
 
     public void exibirMenuApagarCidade() {
-        System.out.println("\n======== Apagar Cidade ========");
-        System.out.println("Digite o ID da cidade que deseja apagar: ");
-        int id = sc.nextInt();
-        sc.nextLine();
-
-        boolean sucesso = cidadeController.apagarCidadeController(id);
-        if (sucesso) {
+        try {
+            System.out.println("\n======== Apagar Cidade ========");
+            System.out.print("Digite o ID da cidade que deseja apagar: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+            cidadeController.apagarCidadeController(id);
             System.out.println("Cidade apagada com sucesso!");
-        } else {
-            System.out.println("Nenhuma cidade encontrada. Verifique o ID.");
+        } catch (CidadeNaoEncontradaException e) {
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 
-    // =====================================================================
-    // MENU ELETROPOSTOS
-    // =====================================================================
-
+    // MENU: ELETROPOSTOS
     public void exibirMenuEletropostos() {
         int opcao;
         while (true) {
             System.out.println("\n======== Menu de Eletropostos ========");
-            System.out.println("\nEscolha uma das opções abaixo:");
             System.out.println("1 - Cadastrar um Novo Eletroposto");
             System.out.println("2 - Listar todos os Eletropostos Registrados");
             System.out.println("3 - Atualizar um Eletroposto Registrado");
@@ -463,59 +386,47 @@ public class Menu {
             sc.nextLine();
 
             switch (opcao) {
-                case 1:
-                    exibirMenuCadastrarEletroposto();
-                    break;
-                case 2:
-                    exibirMenuListarEletropostos();
-                    break;
-                case 3:
-                    exibirMenuAtualizarEletroposto();
-                    break;
-                case 4:
-                    exibirMenuApagarEletroposto();
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Opção inválida! Tente novamente.");
+                case 1: exibirMenuCadastrarEletroposto(); break;
+                case 2: exibirMenuListarEletropostos(); break;
+                case 3: exibirMenuAtualizarEletroposto(); break;
+                case 4: exibirMenuApagarEletroposto(); break;
+                case 0: return;
+                default: System.out.println("Opção inválida! Tente novamente.");
             }
         }
     }
 
     public void exibirMenuCadastrarEletroposto() {
-        System.out.println("\n======== Cadastrar Eletroposto ========");
-        System.out.println("\nDigite o nome do eletroposto: ");
-        String nome = sc.nextLine();
+        try {
+            System.out.println("\n======== Cadastrar Eletroposto ========");
+            System.out.print("Nome do eletroposto: ");
+            String nome = sc.nextLine();
+            System.out.print("Localização: ");
+            String localizacao = sc.nextLine();
+            System.out.print("ID da cidade onde está localizado: ");
+            int cidadeId = sc.nextInt();
+            sc.nextLine();
+            cidadeController.buscarCidadePorIdController(cidadeId);
 
-        System.out.println("Digite a localização: ");
-        String localizacao = sc.nextLine();
+            System.out.print("Tipos de conectores (ex: Tipo2, CCS2): ");
+            String tiposConectores = sc.nextLine();
+            System.out.print("Potência de carga (kW): ");
+            double potenciaCarga = sc.nextDouble();
+            System.out.print("Preço por kWh (R$): ");
+            double precoKwh = sc.nextDouble();
+            System.out.print("Vagas disponíveis: ");
+            int vagasDisponiveis = sc.nextInt();
+            sc.nextLine();
 
-        System.out.println("Digite o ID da cidade onde está localizado: ");
-        int cidadeId = sc.nextInt();
-        sc.nextLine();
+            Eletroposto novoEletroposto = new Eletroposto(0, nome, localizacao, cidadeId, tiposConectores, potenciaCarga, precoKwh, vagasDisponiveis);
+            eletropostoController.cadastrarEletropostoController(novoEletroposto);
+            System.out.println("Eletroposto cadastrado com sucesso!");
 
-        if (cidadeController.buscarCidadePorIdController(cidadeId) == null) {
-            System.out.println("Nenhuma cidade encontrada com o ID " + cidadeId + ". Cadastre a cidade primeiro.");
-            return;
+        } catch (CidadeNaoEncontradaException e) {
+            System.out.println("Erro: " + e.getMessage() + " Cadastre a cidade primeiro.");
+        } catch (ValorInvalidoException e) {
+            System.out.println("Erro ao cadastrar eletroposto: " + e.getMessage());
         }
-
-        System.out.println("Digite os tipos de conectores disponíveis: ");
-        String tiposConectores = sc.nextLine();
-
-        System.out.println("Digite a potência de carga (em kW): ");
-        double potenciaCarga = sc.nextDouble();
-
-        System.out.println("Digite o preço por kWh (em R$): ");
-        double precoKwh = sc.nextDouble();
-
-        System.out.println("Digite a quantidade de vagas disponíveis: ");
-        int vagasDisponiveis = sc.nextInt();
-        sc.nextLine();
-
-        Eletroposto novoEletroposto = new Eletroposto(0, nome, localizacao, cidadeId, tiposConectores, potenciaCarga, precoKwh, vagasDisponiveis);
-        eletropostoController.cadastrarEletropostoController(novoEletroposto);
-        System.out.println("Eletroposto cadastrado com sucesso!");
     }
 
     public void exibirMenuListarEletropostos() {
@@ -527,99 +438,90 @@ public class Menu {
             return;
         }
 
-        for (Eletroposto eletroposto : eletropostos) {
+        for (Eletroposto e : eletropostos) {
             System.out.println("\n-----------------------------------");
-            System.out.println("ID: " + eletroposto.getId());
-            System.out.println("Nome: " + eletroposto.getNome());
-            System.out.println("Localização: " + eletroposto.getLocalizacao());
-            System.out.println("ID da cidade: " + eletroposto.getCidadeId());
-            System.out.println("Tipo de conectores: " + eletroposto.getTiposConectoresDisponiveis());
-            System.out.println("Potência de carga: " + eletroposto.getPotenciaCargaKw() + " kW");
-            System.out.println("Preço por kWh: R$" + eletroposto.getPrecoPorKwh());
-            System.out.println("Vagas disponíveis: " + eletroposto.getVagasDisponiveis());
+            System.out.println("ID: " + e.getId());
+            System.out.println("Nome: " + e.getNome());
+            System.out.println("Localização: " + e.getLocalizacao());
+            System.out.println("ID da cidade: " + e.getCidadeId());
+            System.out.println("Conectores: " + e.getTiposConectoresDisponiveis());
+            System.out.println("Potência: " + e.getPotenciaCargaKw() + " kW");
+            System.out.println("Preço por kWh: R$" + e.getPrecoPorKwh());
+            System.out.println("Vagas disponíveis: " + e.getVagasDisponiveis());
         }
         System.out.println("-----------------------------------");
     }
 
     public void exibirMenuAtualizarEletroposto() {
-        System.out.println("\n======== Atualizar Eletroposto ========");
-        System.out.println("\nDigite o ID do eletroposto que deseja atualizar: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        try {
+            System.out.println("\n======== Atualizar Eletroposto ========");
+            System.out.print("Digite o ID do eletroposto que deseja atualizar: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+            eletropostoController.buscarEletropostoPorIdController(id);
 
-        Eletroposto eletropostoExiste = eletropostoController.buscarEletropostoPorIdController(id);
-        if (eletropostoExiste == null) {
-            System.out.println("Nenhum eletroposto encontrado. Verifique o ID.");
-            return;
+            System.out.print("Novo nome: ");
+            String novoNome = sc.nextLine();
+            System.out.print("Nova localização: ");
+            String novaLocalizacao = sc.nextLine();
+            System.out.print("Novo ID da cidade: ");
+            int novoCidadeId = sc.nextInt();
+            sc.nextLine();
+            System.out.print("Novos tipos de conectores: ");
+            String novosTiposConectores = sc.nextLine();
+            System.out.print("Nova potência de carga (kW): ");
+            double novaPotencia = sc.nextDouble();
+            System.out.print("Novo preço por kWh (R$): ");
+            double novoPreco = sc.nextDouble();
+            System.out.print("Novas vagas disponíveis: ");
+            int novasVagas = sc.nextInt();
+            sc.nextLine();
+
+            Eletroposto atualizado = new Eletroposto(id, novoNome, novaLocalizacao, novoCidadeId, novosTiposConectores, novaPotencia, novoPreco, novasVagas);
+            eletropostoController.atualizarEletropostoController(id, atualizado);
+            System.out.println("Eletroposto atualizado com sucesso!");
+
+        } catch (EletropostoNaoEncontradoException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } catch (ValorInvalidoException e) {
+            System.out.println("Erro ao atualizar eletroposto: " + e.getMessage());
         }
-
-        System.out.println("Novo nome: ");
-        String novoNome = sc.nextLine();
-
-        System.out.println("Nova localização: ");
-        String novaLocalizacao = sc.nextLine();
-
-        System.out.println("Novo ID da cidade: ");
-        int novoCidadeId = sc.nextInt();
-        sc.nextLine();
-
-        System.out.println("Novos tipos de conectores: ");
-        String novoTiposDeConectores = sc.nextLine();
-
-        System.out.println("Nova potência de carga (kW): ");
-        double novaPotenciaCarga = sc.nextDouble();
-
-        System.out.println("Novo preço por kWh (R$): ");
-        double novoPrecoPorKwh = sc.nextDouble();
-
-        System.out.println("Novas vagas disponíveis: ");
-        int novasVagasDisponiveis = sc.nextInt();
-        sc.nextLine();
-
-        Eletroposto eletropostoAtualizado = new Eletroposto(id, novoNome, novaLocalizacao, novoCidadeId, novoTiposDeConectores, novaPotenciaCarga, novoPrecoPorKwh, novasVagasDisponiveis);
-        eletropostoController.atualizarEletropostoController(id, eletropostoAtualizado);
-        System.out.println("Eletroposto atualizado com sucesso!");
     }
 
     public void exibirMenuApagarEletroposto() {
-        System.out.println("\n======== Apagar Eletroposto ========");
-        System.out.println("\nDigite o ID do eletroposto que deseja apagar: ");
-        int id = sc.nextInt();
-        sc.nextLine();
-
-        boolean sucesso = eletropostoController.apagarEletropostoController(id);
-        if (sucesso) {
+        try {
+            System.out.println("\n======== Apagar Eletroposto ========");
+            System.out.print("Digite o ID do eletroposto que deseja apagar: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+            eletropostoController.apagarEletropostoController(id);
             System.out.println("Eletroposto apagado com sucesso!");
-        } else {
-            System.out.println("Nenhum eletroposto encontrado. Verifique o ID.");
+        } catch (EletropostoNaoEncontradoException e) {
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 
-    // =====================================================================
-    // MENU SIMULAÇÃO DE ROTA
-    // =====================================================================
-
+    // MENU: SIMULAÇÃO DE ROTA
     public void exibirMenuSimularRota() {
-        System.out.println("\n======== Simular Autonomia ========");
-        System.out.println("Digite o ID do veículo: ");
-        int veiculoId = sc.nextInt();
-        sc.nextLine();
+        try {
+            System.out.println("\n======== Simular Autonomia ========");
+            System.out.print("Digite o ID do veículo: ");
+            int veiculoId = sc.nextInt();
+            sc.nextLine();
+            veiculoController.buscarVeiculoPorId(veiculoId);
 
-        if (veiculoController.buscarVeiculoPorId(veiculoId) == null) {
-            System.out.println("Nenhum veículo encontrado com o ID " + veiculoId + ". Verifique o ID.");
-            return;
+            System.out.print("Digite o ID da cidade de destino: ");
+            int cidadeId = sc.nextInt();
+            sc.nextLine();
+            cidadeController.buscarCidadePorIdController(cidadeId);
+
+            String resultado = rotaController.simularRota(veiculoId, cidadeId);
+            System.out.println(resultado);
+
+        } catch (VeiculoNaoEncontradoException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } catch (CidadeNaoEncontradaException e) {
+            System.out.println("Erro: " + e.getMessage());
         }
-
-        System.out.println("Digite o ID da cidade de destino: ");
-        int cidadeId = sc.nextInt();
-        sc.nextLine();
-
-        if (cidadeController.buscarCidadePorIdController(cidadeId) == null) {
-            System.out.println("Nenhuma cidade encontrada com o ID " + cidadeId + ". Verifique o ID.");
-            return;
-        }
-
-        String resultado = rotaController.simularRota(veiculoId, cidadeId);
-        System.out.println(resultado);
     }
 }
