@@ -27,7 +27,7 @@ public abstract class Veiculo {
 
     // Setters
     public void setId(int id) {this.id = id;}
-    public void setModelo(String nome) {this.modelo = modelo;}
+    public void setModelo(String modelo) {this.modelo = modelo;}
     public void setAutonomiaMaxima(double autonomiaMaxima) {
         if(autonomiaMaxima > 0){
             this.autonomiaMaxima = autonomiaMaxima;

@@ -1,3 +1,5 @@
+import Gemini.CadastroVeiculoIA;
+import Gemini.GeminiService;
 import controller.CidadeController;
 import controller.EletropostoController;
 import controller.RotaController;
@@ -23,8 +25,11 @@ public class Main {
         // RotaController recebe os três controllers que precisa
         RotaController rotaController = new RotaController(veiculoController, cidadeController, eletropostoController);
 
+        // Instanciando GeminiService e CadastroVeiculoIA
+        GeminiService geminiService = new GeminiService();
+        CadastroVeiculoIA cadastroVeiculoIA = new CadastroVeiculoIA(geminiService);
         // View
-        Menu menu = new Menu(veiculoController, eletropostoController, cidadeController, rotaController);
+        Menu menu = new Menu(veiculoController, eletropostoController, cidadeController, rotaController, cadastroVeiculoIA);
         menu.exibirMenuPrincipal();
     }
 }

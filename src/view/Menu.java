@@ -9,7 +9,7 @@ import model.Eletroposto;
 import model.Veiculo;
 import model.VeiculoEletrico;
 import model.VeiculoHibrido;
-
+import Gemini.CadastroVeiculoIA;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,13 +18,15 @@ public class Menu {
     private EletropostoController eletropostoController;
     private CidadeController cidadeController;
     private RotaController rotaController;
+    private CadastroVeiculoIA cadastroVeiculoIA;
     private Scanner sc = new Scanner(System.in);
 
-    public Menu(VeiculoController veiculoController, EletropostoController eletropostoController, CidadeController cidadeController, RotaController rotaController) {
+    public Menu(VeiculoController veiculoController, EletropostoController eletropostoController, CidadeController cidadeController, RotaController rotaController, CadastroVeiculoIA cadastroVeiculoIA) {
         this.veiculoController = veiculoController;
         this.eletropostoController = eletropostoController;
         this.cidadeController = cidadeController;
         this.rotaController = rotaController;
+        this.cadastroVeiculoIA = cadastroVeiculoIA;
     }
 
     // =====================================================================
@@ -79,6 +81,7 @@ public class Menu {
             System.out.println("2 - Listar todos os Veículos Registrados");
             System.out.println("3 - Atualizar Dados de um Veículo Registrado");
             System.out.println("4 - Apagar um Veículo Registrado");
+            System.out.println("5 - Cadastro Rápido com IA");
             System.out.println("0 - Voltar para o Menu Principal");
             opcao = sc.nextInt();
             sc.nextLine();
@@ -95,6 +98,9 @@ public class Menu {
                     break;
                 case 4:
                     exibirMenuApagarVeiculo();
+                    break;
+                case 5:
+                    exibirMenuCadastroRapidoIA();
                     break;
                 case 0:
                     return;
@@ -306,6 +312,21 @@ public class Menu {
             System.out.println("O veículo foi apagado com sucesso!");
         } else {
             System.out.println("Erro! Veículo não encontrado. Verifique o ID.");
+        }
+    }
+
+    public void exibirMenuCadastroRapidoIA(){
+        System.out.println("\n======== Cadastro Rápido com IA ========");
+        System.out.println("Insira as informações do veículo em texto corrido(tipo, modelo, autonomia, etc.):");
+        String descricaoUsuario = sc.nextLine();
+
+        System.out.println("\nConsultando com o Gemini...");
+        try {
+            Veiculo veiculo = cadastroVeiculoIA.interpretarDescricao(descricaoUsuario);
+        } catch (IllegalStateException | IllegalArgumentException e){
+            System.out.println("\nNão foi possível cadastrar o veículo automaticamente.");
+            System.out.println("Motivo: " + e.getMessage());
+            System.out.println("Tente novaemente ou cadastre manualmente pelas opcoes 1 ou 2.");
         }
     }
 
