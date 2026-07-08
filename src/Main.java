@@ -1,5 +1,3 @@
-import Gemini.CadastroVeiculoIA;
-import Gemini.GeminiService;
 import controller.CidadeController;
 import controller.EletropostoController;
 import controller.RotaController;
@@ -7,7 +5,13 @@ import controller.VeiculoController;
 import repository.CidadeRepository;
 import repository.EletropostoRepository;
 import repository.VeiculoRepository;
-import view.Menu;
+import Gemini.GeminiService;
+import Gemini.CadastroVeiculoIA;
+import Gemini.IAPlannerService;
+import Gemini.GeminiIAPlannerService;
+import view.MainFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,14 +26,19 @@ public class Main {
         CidadeController cidadeController = new CidadeController(cidadeRepository);
         EletropostoController eletropostoController = new EletropostoController(eletropostoRepository);
 
-        // RotaController recebe os três controllers que precisa
-        RotaController rotaController = new RotaController(veiculoController, cidadeController, eletropostoController);
-
-        // Instanciando GeminiService e CadastroVeiculoIA
+        // IA
         GeminiService geminiService = new GeminiService();
         CadastroVeiculoIA cadastroVeiculoIA = new CadastroVeiculoIA(geminiService);
+        IAPlannerService iaPlannerService = new GeminiIAPlannerService(geminiService);
+
+
+        // RotaController recebe os três controllers que precisa
+        RotaController rotaController = new RotaController(veiculoController, cidadeController, eletropostoController, iaPlannerService);
+
         // View
-        Menu menu = new Menu(veiculoController, eletropostoController, cidadeController, rotaController, cadastroVeiculoIA);
-        menu.exibirMenuPrincipal();
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame(veiculoController, cidadeController, eletropostoController,rotaController, cadastroVeiculoIA);
+            frame.setVisible(true);
+        });
     }
 }

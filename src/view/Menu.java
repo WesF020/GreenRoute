@@ -1,5 +1,6 @@
 package view;
 
+import Gemini.CadastroVeiculoIA;
 import controller.CidadeController;
 import controller.EletropostoController;
 import controller.RotaController;
@@ -13,7 +14,6 @@ import model.Eletroposto;
 import model.Veiculo;
 import model.VeiculoEletrico;
 import model.VeiculoHibrido;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,13 +22,15 @@ public class Menu {
     private EletropostoController eletropostoController;
     private CidadeController cidadeController;
     private RotaController rotaController;
+    private CadastroVeiculoIA cadastroVeiculoIA;
     private Scanner sc = new Scanner(System.in);
 
-    public Menu(VeiculoController veiculoController, EletropostoController eletropostoController, CidadeController cidadeController, RotaController rotaController) {
+    public Menu(VeiculoController veiculoController, EletropostoController eletropostoController, CidadeController cidadeController, RotaController rotaController, CadastroVeiculoIA cadastroVeiculoIA) {
         this.veiculoController = veiculoController;
         this.eletropostoController = eletropostoController;
         this.cidadeController = cidadeController;
         this.rotaController = rotaController;
+        this.cadastroVeiculoIA = cadastroVeiculoIA;
     }
 
 
@@ -70,6 +72,7 @@ public class Menu {
             System.out.println("2 - Listar todos os Veículos Registrados");
             System.out.println("3 - Atualizar Dados de um Veículo Registrado");
             System.out.println("4 - Apagar um Veículo Registrado");
+            System.out.println("5 - Cadastro Rápido por IA");
             System.out.println("0 - Voltar para o Menu Principal");
             opcao = sc.nextInt();
             sc.nextLine();
@@ -79,6 +82,7 @@ public class Menu {
                 case 2: exibirMenuListarVeiculos(); break;
                 case 3: exibirMenuAtualizarVeiculos(); break;
                 case 4: exibirMenuApagarVeiculo(); break;
+                case 5: exibirMenuCadastroRapidoIA(); break;
                 case 0: return;
                 default: System.out.println("Opção inválida! Tente novamente.");
             }
@@ -265,6 +269,30 @@ public class Menu {
             System.out.println("Veículo apagado com sucesso!");
         } catch (VeiculoNaoEncontradoException e) {
             System.out.println("Erro: " + e.getMessage());
+        }
+    }
+
+    public void exibirMenuCadastroRapidoIA() {
+        System.out.println("\n======== Cadastro Rápido com IA ========");
+        System.out.println("Descreva o veículo em texto corrido (modelo, tipo, autonomia, etc.):");
+        String descricao = sc.nextLine();
+
+        System.out.println("\nConsultando com o Gemini...");
+        try {
+            Veiculo veiculo = cadastroVeiculoIA.interpretarDescricao(descricao);
+
+            System.out.println("\n--- Dados interpretados pela IA ---");
+            System.out.println("Modelo: " + veiculo.getModelo());
+            System.out.println("Autonomia: " + veiculo.getAutonomiaMaxima() + " km");
+            System.out.println("Carga da bateria: " + veiculo.getCargaBateriaAtual() + "%");
+
+            veiculoController.cadastrarVeiculoController(veiculo);
+            System.out.println("\nVeículo cadastrado com sucesso!");
+
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            System.out.println("\nNão foi possível cadastrar o veículo automaticamente.");
+            System.out.println("Motivo: " + e.getMessage());
+            System.out.println("Tente novamente ou cadastre manualmente pelas opções 1 ou 2.");
         }
     }
 
@@ -503,25 +531,30 @@ public class Menu {
 
     // MENU: SIMULAÇÃO DE ROTA
     public void exibirMenuSimularRota() {
+        System.out.println("\n======== Simular Autonomia ========");
+        System.out.println("Digite o ID do veículo: ");
+        int veiculoId = sc.nextInt();
+        sc.nextLine();
+
+        if (veiculoController.buscarVeiculoPorId(veiculoId) == null) {
+            System.out.println("Nenhum veículo encontrado com o ID " + veiculoId + ". Verifique o ID.");
+            return;
+        }
+
+        System.out.println("Digite o ID da cidade de destino: ");
+        int cidadeId = sc.nextInt();
+        sc.nextLine();
+
+        if (cidadeController.buscarCidadePorIdController(cidadeId) == null) {
+            System.out.println("Nenhuma cidade encontrada com o ID " + cidadeId + ". Verifique o ID.");
+            return;
+        }
+
         try {
-            System.out.println("\n======== Simular Autonomia ========");
-            System.out.print("Digite o ID do veículo: ");
-            int veiculoId = sc.nextInt();
-            sc.nextLine();
-            veiculoController.buscarVeiculoPorId(veiculoId);
-
-            System.out.print("Digite o ID da cidade de destino: ");
-            int cidadeId = sc.nextInt();
-            sc.nextLine();
-            cidadeController.buscarCidadePorIdController(cidadeId);
-
             String resultado = rotaController.simularRota(veiculoId, cidadeId);
             System.out.println(resultado);
-
-        } catch (VeiculoNaoEncontradoException e) {
-            System.out.println("Erro: " + e.getMessage());
-        } catch (CidadeNaoEncontradaException e) {
-            System.out.println("Erro: " + e.getMessage());
+        } catch (exceptions.AutonomiaInsuficienteException | exceptions.ConectorIncompativelException e) {
+            System.out.println("\n" + e.getMessage());
         }
     }
 }

@@ -33,4 +33,9 @@ public class Cidade {
             throw new ValorInvalidoException("A distância não pode ser menor que 0.");
         }
     }
+
+    @Override
+    public String toString(){
+        return nome + " - " + estado;
+    }
 }

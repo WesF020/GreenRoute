@@ -62,4 +62,10 @@ public abstract class Veiculo {
             throw new ValorInvalidoException("Tempo de recarga não pode ser menor que 0.");
         }
     }
+
+    @Override
+    public String toString(){
+        return modelo + " (ID " + id + ")";
+    }
+
 }
