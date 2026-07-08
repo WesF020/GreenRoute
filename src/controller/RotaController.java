@@ -56,7 +56,7 @@ public class RotaController {
         resultado.append("Autonomia insuficiente. Faltam ").append(String.format("%.1f", kmFaltando)).append(" km.\n");
 
         ArrayList<Cidade> todasCidades = cidadeController.listarCidadesController();
-        ArrayList<Eletroposto> eletropostosNoCaminho = eletropostoController.buscarEletropostosPorCidadeController(cidadeDestinoId);
+        ArrayList<Eletroposto> eletropostosNoCaminho = new ArrayList<>();
 
         for (Cidade c : todasCidades) {
             if (c.getId() == cidadeDestinoId) continue;
